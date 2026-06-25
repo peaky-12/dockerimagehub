@@ -1,25 +1,25 @@
-# Use official lightweight Python image
+# Use the official Python image from Docker Hub
 FROM python:3.9-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (optional but useful for builds)
 RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first (for caching)
+# Copy requirements first for caching
 COPY requirements.txt /app/
 
 # Install Python dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy project files
+# Copy the rest of the project files
 COPY . /app/
 
 # Expose Flask default port
@@ -27,3 +27,4 @@ EXPOSE 5000
 
 # Run the Flask app
 CMD ["python", "app.py"]
+
